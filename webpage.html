@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Stocks vs Crypto</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    #dji-chart {
+      width: 800px;
+      height: 500px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Performance and Volatility Analysis</h1>
+
+  <h2>Dow Jones Industrial Average</h2>
+  <div id="dji-chart"></div>
+
+  <script>
+    fetch('/dji_data_close')
+      .then(response => response.json())
+      .then(data => {
+        const djiClose = data.map(row => row.close);
+        const djiDates = data.map(row => row.date);
+
+        const djiTrace = {
+          x: djiDates,
+          y: djiClose,
+          type: 'scatter',
+          mode: 'lines',
+          name: 'DJI'
+        };
+
+        const layout = {
+          title: 'Historical Prices for Dow Jones Industrial Average',
+          xaxis: {
+            title: 'Date'
+          },
+          yaxis: {
+            title: 'Price (USD)'
+          }
+        };
+
+        const chartData = [djiTrace];
+
+        Plotly.newPlot('dji-chart', chartData, layout);
+      })
+      .catch(error => console.error(error));
+  </script>
+</body>
+</html>
